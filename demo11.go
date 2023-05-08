@@ -16,16 +16,18 @@ func main() {
 
 	router.GET("/cookie", func(c *gin.Context) {
 
-		cookie, err := c.Cookie("gin_cookie")
+		cookie, err := c.Cookie("Username")
 
 		if err != nil {
 			cookie = "NotSet"
 			//名称, 值,有效时长,有效路径,域,安全模式是否开启,httponly是否开启
-			c.SetCookie("gin_cookie", "test", 3600, "/", "localhost", false, true)
+			c.SetCookie("Username", "for no one", 60*60, "/", "127.0.0.1", false, true)
+
 		}
 
 		fmt.Printf("Cookie value: %s \n", cookie)
+		c.String(200, "test cookie")
 	})
 
-	router.Run()
+	router.Run(":8000")
 }
