@@ -6,8 +6,20 @@
 
 package model
 
+import "time"
+
 type User struct {
 	UserName string `form:"name"`
 	Password string
 	Hobby    []string
+}
+
+type Person struct {
+	Id      int64
+	Name    string
+	Salt    string
+	Age     int
+	Passwd  string    `xorm:"varchar(200)"`
+	Created time.Time `xorm:"created"`
+	Updated time.Time `xorm:"updated"`
 }

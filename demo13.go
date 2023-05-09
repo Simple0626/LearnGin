@@ -34,9 +34,16 @@ func main() {
 	router.GET("/delete", deleteHandler)
 	router.GET("/update", updateHandler)
 	router.GET("/select", selectHandler)
+	router.GET("/select2", select2Handler)
 	router.Run(":8000")
 
 }
+func select2Handler(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Query("id"))
+	courses := QueryRows(dbs, id)
+	ctx.JSON(200, courses)
+}
+
 func selectHandler(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Query("id"))
 	course := Query(dbs, id)
@@ -150,4 +157,16 @@ func Query(db *sql.DB, id int) (course Course) {
 		Cage:  age,
 	}
 	return course
+}
+
+func QueryRows(db *sql.DB, id int) (courses []Course) {
+	rows, _ := db.Query("select id,name,age from user where id > ?", id)
+	defer rows.Close()
+	for rows.Next() {
+		var course Course
+		rows.Scan(&course.Cid, &course.Cname, &course.Cage)
+		courses = append(courses, course)
+
+	}
+	return courses
 }
